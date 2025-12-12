@@ -113,4 +113,14 @@ Feel free to submit issues or pull requests!
 
 ## License
 
-MIT
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Security
+
+This repository is public. Please note:
+- ✅ **Safe**: Environment variables (`.env` files) are excluded via `.gitignore`
+- ✅ **Safe**: Only repository collaborators can push changes
+- ✅ **Safe**: Vercel deployments only trigger from authorized pushes
+- ⚠️ **Note**: Anyone can view and clone the code (this is normal for public repos)
+
+If you find any security vulnerabilities, please report them responsibly.
