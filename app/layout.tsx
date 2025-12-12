@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from 'next/script';
 import "./globals.css";
 import Link from 'next/link';
 import { Search } from 'lucide-react';
@@ -15,6 +16,9 @@ export const metadata: Metadata = {
   description: "Comprehensive directory of AI tools for text, image, video, code, and more. Compare features, pricing, and find the perfect AI tool for your needs.",
   keywords: ["AI tools", "artificial intelligence", "AI directory", "compare AI tools", "AI software", "machine learning tools"],
   authors: [{ name: "aItoolfinder" }],
+  other: {
+    'google-adsense-account': 'ca-pub-9007185070437670',
+  },
   openGraph: {
     title: "aItoolfinder - Discover the Best AI Tools",
     description: "Find, compare, and choose the perfect AI tool for your needs.",
@@ -38,7 +42,29 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="google-adsense-account" content="ca-pub-9007185070437670" />
+      </head>
       <body className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors">
+        {/* AdSense Script - beforeInteractive strategy injects into head */}
+        <Script
+          id="adsbygoogle-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (adsbygoogle = window.adsbygoogle || []).push({
+                google_ad_client: "ca-pub-9007185070437670",
+                enable_page_level_ads: true
+              });
+            `,
+          }}
+        />
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9007185070437670"
+          crossOrigin="anonymous"
+          strategy="beforeInteractive"
+        />
         <ThemeProvider>
         <nav className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50 shadow-sm transition-colors">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

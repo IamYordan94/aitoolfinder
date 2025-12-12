@@ -389,7 +389,7 @@ function CreatePostsContent() {
                       <textarea
                         readOnly
                         value={template}
-                        className="w-full h-32 p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-900 text-sm font-mono"
+                        className="w-full h-32 p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white text-sm font-mono"
                       />
                       <button
                         onClick={copyTemplate}
