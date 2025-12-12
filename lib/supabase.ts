@@ -156,29 +156,68 @@ export const getAllPosts = async (): Promise<Post[]> => {
 
 export const getPostBySlug = async (slug: string): Promise<Post | null> => {
   try {
+    if (!slug || typeof slug !== 'string' || slug.trim().length === 0) {
+      console.error('getPostBySlug: Invalid slug provided');
+      return null;
+    }
+
     const client = getSupabaseClient();
     
     const { data, error } = await client
       .from('posts')
       .select('*')
-      .eq('slug', slug)
+      .eq('slug', slug.trim())
       .not('published_at', 'is', null)
       .lte('published_at', new Date().toISOString())
       .single();
     
     if (error) {
       if (error.code === 'PGRST116') {
-        // No rows returned
+        // No rows returned - post not found
+        console.log(`Post with slug "${slug}" not found`);
         return null;
       }
-      console.error('Error fetching post:', error);
+      console.error('Error fetching post:', {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        slug,
+      });
       return null;
     }
     
+    if (!data) {
+      console.log(`Post with slug "${slug}" returned null data`);
+      return null;
+    }
+
+    // Validate required fields
+    if (!data.id || !data.title || !data.slug) {
+      console.error('Post data missing required fields:', {
+        hasId: !!data.id,
+        hasTitle: !!data.title,
+        hasSlug: !!data.slug,
+        slug,
+      });
+      return null;
+    }
+
+    // Ensure content_html exists (can be empty string but not null/undefined)
+    if (data.content_html === null || data.content_html === undefined) {
+      console.warn(`Post "${slug}" has null/undefined content_html, setting to empty string`);
+      data.content_html = '';
+    }
+
     return data as Post;
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error';
-    console.error('getPostBySlug failed:', message);
+    const stack = error instanceof Error ? error.stack : undefined;
+    console.error('getPostBySlug failed:', {
+      message,
+      stack,
+      slug,
+    });
     return null;
   }
 };

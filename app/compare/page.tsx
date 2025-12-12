@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { Tool } from '@/types/tool';
+import { Tool, Category } from '@/types/tool';
 import AdSense from '@/components/AdSense';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import { X, Plus } from 'lucide-react';
+import { X, Plus, Filter } from 'lucide-react';
 
 // Lazy load ToolComparison component (code splitting)
 const ToolComparison = dynamic(() => import('@/components/ToolComparison'), {
@@ -18,11 +18,35 @@ export default function ComparePage() {
   const [selectedTools, setSelectedTools] = useState<Tool[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredTools, setFilteredTools] = useState<Tool[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
 
+  // Fetch categories
+  useEffect(() => {
+    setCategoriesLoading(true);
+    fetch('/api/categories')
+      .then(res => res.json())
+      .then(data => {
+        const cats = Array.isArray(data) ? data : [];
+        setCategories(cats);
+      })
+      .catch(error => {
+        console.error('Error fetching categories:', error);
+        setCategories([]);
+      })
+      .finally(() => setCategoriesLoading(false));
+  }, []);
+
+  // Fetch tools based on selected category
   useEffect(() => {
     setLoading(true);
-    fetch('/api/tools')
+    const url = selectedCategory 
+      ? `/api/tools?category=${encodeURIComponent(selectedCategory)}`
+      : '/api/tools';
+    
+    fetch(url)
       .then(res => res.json())
       .then(data => {
         // Ensure data is an array
@@ -36,8 +60,9 @@ export default function ComparePage() {
         setFilteredTools([]);
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [selectedCategory]);
 
+  // Filter tools by search query (within selected category)
   useEffect(() => {
     if (!Array.isArray(allTools)) {
       setFilteredTools([]);
@@ -66,7 +91,7 @@ export default function ComparePage() {
     setSelectedTools(selectedTools.filter(t => t.id !== toolId));
   };
 
-  if (loading) {
+  if (loading || categoriesLoading) {
     return (
       <LoadingSpinner 
         size="lg" 
@@ -124,12 +149,36 @@ export default function ComparePage() {
               : 'Maximum 4 tools selected'}
           </h2>
           
+          {/* Category Filter */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              <Filter className="w-4 h-4 inline mr-1" />
+              Filter by Category
+            </label>
+            <select
+              value={selectedCategory || ''}
+              onChange={(e) => {
+                setSelectedCategory(e.target.value || null);
+                setSearchQuery(''); // Clear search when category changes
+              }}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+            >
+              <option value="">All Categories</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Search Input */}
           <div className="mb-6">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search for tools to add..."
+              placeholder={selectedCategory ? `Search ${selectedCategory} tools...` : "Search for tools to add..."}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>

@@ -62,24 +62,78 @@ async function getToolsByNames(toolNames: string[]): Promise<any[]> {
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const post = await getPostBySlug(params.slug);
-  
+  let post;
+  let relatedTools: any[] = [];
+  let publishDate: string | null = null;
+  let errorMessage: string | null = null;
+
+  try {
+    // Validate params
+    if (!params?.slug || typeof params.slug !== 'string') {
+      console.error('Invalid slug parameter:', params);
+      notFound();
+    }
+
+    // Fetch post
+    post = await getPostBySlug(params.slug);
+    
+    if (!post) {
+      console.log(`Post not found for slug: ${params.slug}`);
+      notFound();
+    }
+
+    // Validate post has required fields
+    if (!post.title || !post.slug) {
+      console.error('Post missing required fields:', {
+        hasTitle: !!post.title,
+        hasSlug: !!post.slug,
+        slug: params.slug,
+      });
+      notFound();
+    }
+
+    // Ensure content_html is a string
+    if (typeof post.content_html !== 'string') {
+      console.warn(`Post "${params.slug}" has invalid content_html type, converting to string`);
+      post.content_html = String(post.content_html || '');
+    }
+
+    // Get related tools if they exist (with error handling)
+    try {
+      if (post.related_tools && Array.isArray(post.related_tools) && post.related_tools.length > 0) {
+        relatedTools = await getToolsByNames(post.related_tools);
+      }
+    } catch (toolsError) {
+      console.error('Error fetching related tools:', toolsError);
+      relatedTools = []; // Continue without related tools
+    }
+
+    // Format publish date
+    try {
+      if (post.published_at) {
+        publishDate = new Date(post.published_at).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        });
+      }
+    } catch (dateError) {
+      console.error('Error formatting publish date:', dateError);
+      publishDate = null;
+    }
+  } catch (error) {
+    console.error('Error in BlogPostPage:', error);
+    errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+    // If it's a critical error, show not found
+    if (error instanceof Error && error.message.includes('not found')) {
+      notFound();
+    }
+  }
+
+  // If we still don't have a post after all error handling, show not found
   if (!post) {
     notFound();
   }
-
-  // Get related tools if they exist
-  const relatedTools = post.related_tools && post.related_tools.length > 0
-    ? await getToolsByNames(post.related_tools)
-    : [];
-
-  const publishDate = post.published_at 
-    ? new Date(post.published_at).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
-    : null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
@@ -149,12 +203,25 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <AdSense />
         </div>
 
+        {/* Error Message */}
+        {errorMessage && (
+          <div className="mb-8 p-4 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded-lg text-yellow-800 dark:text-yellow-300 text-sm">
+            <p>Note: {errorMessage}</p>
+          </div>
+        )}
+
         {/* Post Content */}
         <article className="prose prose-lg dark:prose-invert max-w-none mb-12">
-          <div
-            className="blog-content text-gray-700 dark:text-gray-300"
-            dangerouslySetInnerHTML={{ __html: post.content_html }}
-          />
+          {post.content_html && post.content_html.trim().length > 0 ? (
+            <div
+              className="blog-content text-gray-700 dark:text-gray-300"
+              dangerouslySetInnerHTML={{ __html: post.content_html }}
+            />
+          ) : (
+            <div className="text-gray-500 dark:text-gray-400 italic">
+              <p>This post doesn't have any content yet.</p>
+            </div>
+          )}
         </article>
 
         {/* Related Tools Section */}
