@@ -20,7 +20,7 @@ export default function ComparePage() {
   const [filteredTools, setFilteredTools] = useState<Tool[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
 
   // Fetch categories
@@ -146,8 +146,8 @@ export default function ComparePage() {
           </div>
         )}
 
-        {/* Category Selection - Show First */}
-        {!selectedCategory && (
+        {/* Category Selection - Show First - ALWAYS show when no category selected */}
+        {selectedCategory === null && categories.length > 0 && (
           <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm mb-8 transition-colors">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6 text-center">
               Choose a Category to Compare Tools
@@ -158,6 +158,8 @@ export default function ComparePage() {
                 onClick={() => {
                   setSelectedCategory('all');
                   setSearchQuery('');
+                  setAllTools([]);
+                  setFilteredTools([]);
                 }}
                 className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900 dark:to-purple-900 rounded-xl p-6 shadow-md text-center border-2 border-blue-300 dark:border-blue-600 hover:shadow-lg hover:border-blue-400 dark:hover:border-blue-500 transition-all transform hover:-translate-y-1"
               >
@@ -173,13 +175,15 @@ export default function ComparePage() {
                   onClick={() => {
                     setSelectedCategory(category.name);
                     setSearchQuery('');
+                    setAllTools([]);
+                    setFilteredTools([]);
                   }}
                   className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900 dark:to-purple-900 rounded-xl p-6 shadow-md text-center border-2 border-transparent hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-lg transition-all transform hover:-translate-y-1"
                 >
                   <Sparkles className="w-8 h-8 mx-auto mb-2 text-blue-600 dark:text-blue-400" />
                   <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{category.name}</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-300">
-                    {allTools.filter(t => t.category === category.name).length} tools
+                    {category.name} tools
                   </p>
                 </button>
               ))}
@@ -187,8 +191,15 @@ export default function ComparePage() {
           </div>
         )}
 
-        {/* Tool Selection - Show After Category Selected */}
-        {selectedCategory && (
+        {/* Show message if categories are loading */}
+        {selectedCategory === null && categories.length === 0 && !categoriesLoading && (
+          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm mb-8 transition-colors text-center">
+            <p className="text-gray-600 dark:text-gray-400">No categories available. Please try refreshing the page.</p>
+          </div>
+        )}
+
+        {/* Tool Selection - Show After Category Selected - ONLY show when category is selected */}
+        {selectedCategory !== null && selectedCategory !== undefined && (
           <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm transition-colors">
             <div className="flex items-center justify-between mb-6">
               <div>
@@ -220,7 +231,8 @@ export default function ComparePage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={`Search ${selectedCategory === 'all' ? 'all' : selectedCategory} tools...`}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                style={{ color: 'inherit' }}
               />
             </div>
 
