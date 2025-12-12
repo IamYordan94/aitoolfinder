@@ -20,12 +20,12 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   
   if (!post) {
     return {
-      title: 'Post Not Found - AI Scope',
+      title: 'Post Not Found - aItoolfinder',
     };
   }
 
   return {
-    title: `${post.title} - AI Scope Blog`,
+    title: `${post.title} - aItoolfinder Blog`,
     description: post.excerpt || post.title,
     openGraph: {
       title: post.title,

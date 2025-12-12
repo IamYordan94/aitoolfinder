@@ -10,7 +10,7 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Browse AI Tools - AI Scope',
+  title: 'Browse AI Tools - aItoolfinder',
   description: 'Browse and discover AI tools for text, image, video, code, and more. Filter by category and find the perfect tool for your needs.',
 };
 

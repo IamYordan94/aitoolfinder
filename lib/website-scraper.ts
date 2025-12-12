@@ -22,7 +22,7 @@ export async function scrapeWebsiteInfo(url: string): Promise<WebsiteInfo | null
     // For production, consider using a service like ScraperAPI or similar
     const response = await fetch(url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; AI-Scope/1.0; +https://yoursite.com)',
+        'User-Agent': 'Mozilla/5.0 (compatible; aItoolfinder/1.0; +https://yoursite.com)',
         'Accept': 'text/html,application/xhtml+xml',
       },
       // Add timeout

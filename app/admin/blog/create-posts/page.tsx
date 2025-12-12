@@ -187,14 +187,14 @@ function CreatePostsContent() {
 
     try {
       // Determine published_at value based on action
-      let publishedAt: string | null | 'now' = null;
+      let publishedAt: string | null | 'now' | 'draft' | 'schedule' = null;
       if (publishAction === 'now') {
         publishedAt = 'now';
       } else if (publishAction === 'draft') {
-        publishedAt = null;
+        publishedAt = 'draft'; // Use 'draft' to distinguish from 'schedule'
       } else {
-        // 'schedule' - auto-schedule (null triggers auto-schedule in API)
-        publishedAt = null;
+        // 'schedule' - auto-schedule
+        publishedAt = 'schedule'; // Use 'schedule' to trigger auto-scheduling
       }
 
       const response = await fetch('/api/admin/create-post', {

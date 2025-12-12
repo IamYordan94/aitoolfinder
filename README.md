@@ -1,4 +1,4 @@
-# AI Scope
+# aItoolfinder
 
 A comprehensive directory of AI tools with search, filtering, and comparison features. Built with Next.js 14, TypeScript, Tailwind CSS, and Supabase.
 

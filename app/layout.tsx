@@ -11,18 +11,18 @@ import ServiceWorker from '@/components/ServiceWorker';
 import CookieConsent from '@/components/CookieConsent';
 
 export const metadata: Metadata = {
-  title: "AI Scope - Discover the Best AI Tools",
+  title: "aItoolfinder - Discover the Best AI Tools",
   description: "Comprehensive directory of AI tools for text, image, video, code, and more. Compare features, pricing, and find the perfect AI tool for your needs.",
   keywords: ["AI tools", "artificial intelligence", "AI directory", "compare AI tools", "AI software", "machine learning tools"],
-  authors: [{ name: "AI Scope" }],
+  authors: [{ name: "aItoolfinder" }],
   openGraph: {
-    title: "AI Scope - Discover the Best AI Tools",
+    title: "aItoolfinder - Discover the Best AI Tools",
     description: "Find, compare, and choose the perfect AI tool for your needs.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Scope - Discover the Best AI Tools",
+    title: "aItoolfinder - Discover the Best AI Tools",
     description: "Comprehensive directory of AI tools for all your needs.",
   },
   robots: {
@@ -47,7 +47,7 @@ export default function RootLayout({
                 <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold shadow-md">
                   AI
                 </div>
-                <span className="font-bold text-xl text-gray-900 dark:text-white">AI Scope</span>
+                <span className="font-bold text-xl text-gray-900 dark:text-white">aItoolfinder</span>
               </Link>
               <div className="flex items-center gap-6">
                 <Link href="/tools" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors" prefetch={true}>
@@ -78,7 +78,7 @@ export default function RootLayout({
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               <div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">AI Scope</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">aItoolfinder</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   Discover and compare the best AI tools for your needs.
                 </p>
@@ -108,7 +108,7 @@ export default function RootLayout({
             </div>
             <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
               <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-                <p>&copy; {new Date().getFullYear()} AI Scope. All rights reserved.</p>
+                <p>&copy; {new Date().getFullYear()} aItoolfinder. All rights reserved.</p>
                 <div className="flex flex-wrap justify-center gap-4">
                   <Link href="/privacy" className="hover:text-gray-900 dark:hover:text-white transition-colors">
                     Privacy Policy

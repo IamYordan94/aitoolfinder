@@ -5,10 +5,10 @@ import type { Metadata } from 'next';
 import AdSense from '@/components/AdSense';
 
 export const metadata: Metadata = {
-  title: 'Blog - AI Scope',
+  title: 'Blog - aItoolfinder',
   description: 'Read articles about AI tools, reviews, comparisons, and guides to help you choose the best AI tools for your needs.',
   openGraph: {
-    title: 'Blog - AI Scope',
+    title: 'Blog - aItoolfinder',
     description: 'Read articles about AI tools, reviews, comparisons, and guides.',
     type: 'website',
   },

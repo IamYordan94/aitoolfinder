@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy - AI Scope',
-  description: 'Privacy Policy for AI Scope - Learn how we collect, use, and protect your data.',
+  title: 'Privacy Policy - aItoolfinder',
+  description: 'Privacy Policy for aItoolfinder - Learn how we collect, use, and protect your data.',
 };
 
 export default function PrivacyPolicyPage() {
@@ -35,11 +35,11 @@ export default function PrivacyPolicyPage() {
               1. Introduction
             </h2>
             <p className="text-gray-700 dark:text-gray-300 mb-4">
-              Welcome to AI Scope ("we," "our," or "us"). This Privacy Policy explains how we collect, 
+              Welcome to aItoolfinder ("we," "our," or "us"). This Privacy Policy explains how we collect, 
               use, disclose, and safeguard your information when you visit our website.
             </p>
             <p className="text-gray-700 dark:text-gray-300">
-              By using AI Scope, you consent to the data practices described in this policy.
+              By using aItoolfinder, you consent to the data practices described in this policy.
             </p>
           </section>
 
@@ -51,7 +51,7 @@ export default function PrivacyPolicyPage() {
               2.1 Automatically Collected Information
             </h3>
             <p className="text-gray-700 dark:text-gray-300 mb-4">
-              When you visit AI Scope, we automatically collect certain information about your device, 
+              When you visit aItoolfinder, we automatically collect certain information about your device, 
               including:
             </p>
             <ul className="list-disc pl-6 text-gray-700 dark:text-gray-300 mb-4 space-y-2">

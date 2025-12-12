@@ -7,10 +7,10 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Scope - Discover the Best AI Tools',
+  title: 'aItoolfinder - Discover the Best AI Tools',
   description: 'Comprehensive directory of AI tools for text, image, video, code, and more. Compare features, pricing, and find the perfect AI tool for your needs.',
   openGraph: {
-    title: 'AI Scope - Discover the Best AI Tools',
+    title: 'aItoolfinder - Discover the Best AI Tools',
     description: 'Find, compare, and choose the perfect AI tool for your needs.',
     type: 'website',
   },

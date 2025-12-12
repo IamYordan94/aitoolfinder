@@ -42,13 +42,15 @@ export async function GET(request: NextRequest) {
     
     // Generate ETag for caching
     const etag = generateETag(data);
+    // ETag should be quoted per HTTP spec
+    const quotedEtag = `"${etag}"`;
     
     // Check if client has cached version (304 Not Modified)
-    if (checkETag(request, etag)) {
+    if (checkETag(request, quotedEtag)) {
       return new NextResponse(null, {
         status: 304,
         headers: {
-          'ETag': `"${etag}"`,
+          'ETag': quotedEtag,
           'Cache-Control': getCacheControl(3600, 86400),
         },
       });
@@ -58,7 +60,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(data, {
       headers: {
         'Cache-Control': getCacheControl(3600, 86400),
-        'ETag': `"${etag}"`,
+        'ETag': quotedEtag,
         'Content-Type': 'application/json',
         'X-RateLimit-Limit': rateLimit.limit.toString(),
         'X-RateLimit-Remaining': rateLimit.remaining.toString(),

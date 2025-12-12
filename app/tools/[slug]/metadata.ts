@@ -6,15 +6,15 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   
   if (!tool) {
     return {
-      title: 'Tool Not Found - AI Scope',
+      title: 'Tool Not Found - aItoolfinder',
     };
   }
 
   return {
-    title: `${tool.name} - AI Scope`,
+    title: `${tool.name} - aItoolfinder`,
     description: tool.description || `Discover ${tool.name}, a ${tool.category || 'AI'} tool. ${tool.description?.substring(0, 120)}...`,
     openGraph: {
-      title: `${tool.name} - AI Scope`,
+      title: `${tool.name} - aItoolfinder`,
       description: tool.description || '',
       type: 'website',
     },
