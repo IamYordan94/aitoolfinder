@@ -5,7 +5,6 @@
 -- - Tool lookups by slug
 -- - Filtering by category
 -- - Sorting by popularity
--- - Blog post queries
 
 -- Index on tools.slug (unique, for fast lookups)
 -- This is critical for tool detail page performance
@@ -33,13 +32,6 @@ CREATE INDEX IF NOT EXISTS idx_tools_pricing_tier ON tools(pricing_tier);
 -- Index on tools.pricing_free (for filtering free tools)
 CREATE INDEX IF NOT EXISTS idx_tools_pricing_free ON tools(pricing_free) WHERE pricing_free = true;
 
--- Index on posts.published_at (for blog)
--- Only index published posts (partial index)
-CREATE INDEX IF NOT EXISTS idx_posts_published_at ON posts(published_at DESC) WHERE published_at IS NOT NULL;
-
--- Index on posts.slug (for blog post lookups)
-CREATE INDEX IF NOT EXISTS idx_posts_slug ON posts(slug);
-
 -- Index on categories.name (for category lookups)
 CREATE INDEX IF NOT EXISTS idx_categories_name ON categories(name);
 
@@ -52,7 +44,7 @@ SELECT
     indexdef 
 FROM pg_indexes 
 WHERE schemaname = 'public' 
-    AND tablename IN ('tools', 'posts', 'categories')
+    AND tablename IN ('tools', 'categories')
 ORDER BY tablename, indexname;
 
 -- Expected output should show all the indexes above

@@ -8,6 +8,7 @@ import AdSense from '@/components/AdSense';
 import { Filter } from 'lucide-react';
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
+import type { Tool, Category } from '@/types/tool';
 
 export const metadata: Metadata = {
   title: 'Browse AI Tools - aItoolfinder',
@@ -35,14 +36,16 @@ export default async function ToolsPage({ searchParams }: ToolsPageProps) {
   const currentPage = Math.max(1, parseInt(page || '1', 10));
   
   // Always fetch total tools count for stats display
-  let allTools: any[] = [];
+  let allTools: Tool[] = [];
   try {
     allTools = await getAllTools();
   } catch (error) {
-    console.error('Error fetching all tools:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error fetching all tools:', error);
+    }
   }
   
-  let tools: any[] = [];
+  let tools: Tool[] = [];
   try {
     if (search) {
       tools = await searchTools(search);
@@ -75,7 +78,9 @@ export default async function ToolsPage({ searchParams }: ToolsPageProps) {
       tools.sort((a, b) => (b.popularity_score || 0) - (a.popularity_score || 0));
     }
   } catch (error) {
-    console.error('Error fetching tools:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error fetching tools:', error);
+    }
     tools = [];
   }
 
@@ -86,11 +91,13 @@ export default async function ToolsPage({ searchParams }: ToolsPageProps) {
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const paginatedTools = tools.slice(startIndex, endIndex);
 
-  let categories: any[] = [];
+  let categories: Category[] = [];
   try {
     categories = await getAllCategories();
   } catch (error) {
-    console.error('Error fetching categories:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error fetching categories:', error);
+    }
     categories = [];
   }
 

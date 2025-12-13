@@ -1,10 +1,10 @@
 import Link from 'next/link';
-import { getAllTools, getAllCategories } from '@/lib/supabase';
 import ToolCard from '@/components/ToolCard';
 import SearchBar from '@/components/SearchBar';
 import AdSense from '@/components/AdSense';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import type { Metadata } from 'next';
+import { fetchToolsWithFallback } from '@/lib/data-fetch-utils';
 
 export const metadata: Metadata = {
   title: 'aItoolfinder - Discover the Best AI Tools',
@@ -20,58 +20,9 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function Home() {
-  let tools: any[] = [];
-  let categories: any[] = [];
-  let errorMessage: string | null = null;
+  const { tools, categories, errorMessage } = await fetchToolsWithFallback();
   
-  try {
-    // Fetch categories first
-    const categoriesResult = await Promise.allSettled([
-      getAllCategories(),
-    ]);
-    
-    if (categoriesResult[0].status === 'fulfilled') {
-      categories = categoriesResult[0].value;
-    }
-    
-    // Try to fetch all tools
-    try {
-      tools = await getAllTools();
-      if (tools.length === 0 && categories.length > 0) {
-        // If getAllTools returns empty but we have categories, try fallback
-        console.log('getAllTools returned empty, trying category fallback...');
-        const { getToolsByCategory } = await import('@/lib/supabase');
-        const categoryTools = await Promise.all(
-          categories.map(cat => 
-            getToolsByCategory(cat.name).catch(() => [])
-          )
-        );
-        tools = categoryTools.flat();
-        console.log('Fallback: Fetched', tools.length, 'tools by category');
-      }
-    } catch (toolsError: any) {
-      console.error('getAllTools failed, trying fallback:', toolsError.message);
-      
-      // Fallback: Fetch tools by category and combine
-      if (categories.length > 0) {
-        const { getToolsByCategory } = await import('@/lib/supabase');
-        const categoryTools = await Promise.all(
-          categories.map(cat => 
-            getToolsByCategory(cat.name).catch(() => [])
-          )
-        );
-        tools = categoryTools.flat();
-        console.log('Fallback: Fetched', tools.length, 'tools by category');
-      }
-      
-      errorMessage = toolsError.message;
-    }
-  } catch (error: any) {
-    console.error('Unexpected error on homepage:', error);
-    errorMessage = error.message;
-  }
-  
-  // Debug: Log what we got
+  // Debug: Log what we got (development only)
   if (process.env.NODE_ENV === 'development') {
     console.log('Homepage - Tools count:', tools.length, 'Categories count:', categories.length);
     if (tools.length === 0 && categories.length > 0) {

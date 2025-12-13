@@ -3,6 +3,8 @@
  * This ensures the website is fully populated on first deployment
  */
 
+import type { PricingDetails } from '@/types/tool';
+
 export interface ToolSeed {
   name: string;
   description: string;
@@ -11,7 +13,7 @@ export interface ToolSeed {
   logo_url?: string;
   pricing_free: boolean;
   pricing_tier: string;
-  pricing_details: any;
+  pricing_details: PricingDetails;
   features: string[];
   use_cases: string[];
   tags: string[];

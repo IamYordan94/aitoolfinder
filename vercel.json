@@ -3,10 +3,6 @@
     {
       "path": "/api/cron/update-tools",
       "schedule": "0 6 * * 1"
-    },
-    {
-      "path": "/api/cron/publish-blog-posts",
-      "schedule": "0 0 * * *"
     }
   ]
 }

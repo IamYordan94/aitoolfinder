@@ -32,7 +32,9 @@ export default function ComparePage() {
         setCategories(cats);
       })
       .catch(error => {
-        console.error('Error fetching categories:', error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error fetching categories:', error);
+        }
         setCategories([]);
       })
       .finally(() => setCategoriesLoading(false));
@@ -59,7 +61,9 @@ export default function ComparePage() {
           setCategoryTools(prev => new Map(prev).set(categoryName, tools));
         })
         .catch(error => {
-          console.error(`Error fetching tools for ${categoryName}:`, error);
+          if (process.env.NODE_ENV === 'development') {
+            console.error(`Error fetching tools for ${categoryName}:`, error);
+          }
           setCategoryTools(prev => new Map(prev).set(categoryName, []));
         })
         .finally(() => {

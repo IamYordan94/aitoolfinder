@@ -54,28 +54,3 @@ INSERT INTO categories (name, slug, description) VALUES
   ('Productivity AI', 'productivity-ai', 'AI tools for productivity, automation, and workflow')
 ON CONFLICT (name) DO NOTHING;
 
--- Create posts table for blog
-CREATE TABLE IF NOT EXISTS posts (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  title VARCHAR(255) NOT NULL,
-  slug VARCHAR(255) UNIQUE NOT NULL,
-  excerpt TEXT,
-  content_html TEXT NOT NULL,
-  tags TEXT[], -- array of tags
-  hero_image_url VARCHAR(500),
-  published_at TIMESTAMP, -- nullable for drafts
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW()
-);
-
--- Create indexes for better query performance
-CREATE INDEX IF NOT EXISTS idx_posts_slug ON posts(slug);
-CREATE INDEX IF NOT EXISTS idx_posts_published_at ON posts(published_at DESC);
-CREATE INDEX IF NOT EXISTS idx_posts_tags ON posts USING GIN(tags);
-
--- Enable Row Level Security (RLS)
-ALTER TABLE posts ENABLE ROW LEVEL SECURITY;
-
--- Create policies for public read access (only published posts)
-CREATE POLICY "Public read access for published posts" ON posts
-  FOR SELECT USING (published_at IS NOT NULL AND published_at <= NOW());

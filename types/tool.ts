@@ -1,3 +1,9 @@
+export interface PricingDetails {
+  monthly?: string;
+  annual?: string;
+  free_tier?: string;
+}
+
 export interface Tool {
   id: string;
   name: string;
@@ -8,11 +14,7 @@ export interface Tool {
   logo_url: string | null;
   pricing_free: boolean;
   pricing_tier: string | null;
-  pricing_details: {
-    monthly?: string;
-    annual?: string;
-    free_tier?: string;
-  } | null;
+  pricing_details: PricingDetails | null;
   features: string[];
   use_cases: string[];
   tags: string[];

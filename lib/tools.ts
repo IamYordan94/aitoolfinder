@@ -9,7 +9,9 @@ export function slugify(text: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
-export function formatPricing(pricingDetails: any): string {
+import type { PricingDetails } from '@/types/tool';
+
+export function formatPricing(pricingDetails: PricingDetails | null | undefined): string {
   if (!pricingDetails) return 'Contact for pricing';
   
   if (pricingDetails.monthly) {

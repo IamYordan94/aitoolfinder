@@ -52,9 +52,11 @@ export const getAllTools = async (): Promise<Tool[]> => {
       .select('*');
     
     if (error) {
-      console.error('Error in getAllTools:', error);
-      console.error('Error code:', error.code);
-      console.error('Error message:', error.message);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error in getAllTools:', error);
+        console.error('Error code:', error.code);
+        console.error('Error message:', error.message);
+      }
       throw error;
     }
     
@@ -76,11 +78,15 @@ export const getAllTools = async (): Promise<Tool[]> => {
       });
     }
     
-    console.log(`getAllTools: Found ${tools.length} tools`);
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`getAllTools: Found ${tools.length} tools`);
+    }
     return tools;
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error';
-    console.error('getAllTools failed:', message);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('getAllTools failed:', message);
+    }
     throw error;
   }
 };
